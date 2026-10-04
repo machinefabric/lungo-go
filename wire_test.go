@@ -239,7 +239,8 @@ func parseType(t *testing.T, h string) (dyn, byte) {
 	return d, b[0]
 }
 
-func TestValidVectorsRoundTrip(t *testing.T) {
+// TEST0001: valid Vectors Round Trip
+func Test0001_ValidVectorsRoundTrip(t *testing.T) {
 	for _, v := range loadVectors(t).Valid {
 		ty, tag := parseType(t, v.Type)
 		if tag == tagFunction || tag == tagOpaque {
@@ -271,7 +272,8 @@ func TestValidVectorsRoundTrip(t *testing.T) {
 	}
 }
 
-func TestInvalidVectorsAreRejected(t *testing.T) {
+// TEST0002: invalid Vectors Are Rejected
+func Test0002_InvalidVectorsAreRejected(t *testing.T) {
 	for _, v := range loadVectors(t).Invalid {
 		ty, _ := parseType(t, v.Type)
 		data, _ := hex.DecodeString(v.Bytes)
@@ -286,7 +288,8 @@ func TestInvalidVectorsAreRejected(t *testing.T) {
 	}
 }
 
-func TestGoValuesLeanCannotRepresentAreRejected(t *testing.T) {
+// TEST0003: go Values Lean Cannot Represent Are Rejected
+func Test0003_GoValuesLeanCannotRepresentAreRejected(t *testing.T) {
 	w := &Writer{}
 	for name, err := range map[string]error{
 		"negative Nat":   NatType.Encode(w, big.NewInt(-1)),
