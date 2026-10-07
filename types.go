@@ -298,7 +298,11 @@ func (w *Writer) handle(h *Handle) (uint64, error) {
 	if w.result {
 		return h.clone()
 	}
-	return h.live()
+	id, err := h.live()
+	if err == nil {
+		w.lent = append(w.lent, h)
+	}
+	return id, err
 }
 
 func expr(tag byte, parts ...[]byte) []byte {

@@ -25,6 +25,13 @@ type Writer struct {
 	result bool
 	// temps: host functions registered for the call, released when it returns.
 	temps []uint64
+	// lent: the handles whose identifiers the arguments carry. An identifier
+	// is only a number: the Handle it came from must stay reachable until the
+	// call has read it, or its finalizer can release the value first — capdag-go
+	// saw "217920 is not a live handle" on an argument built from a temporary.
+	// Kept here, and kept alive by Release, which every call runs after it
+	// returns.
+	lent []*Handle
 }
 
 // NewCall starts encoding a call to a function of p with the type arguments `types` (in
@@ -47,6 +54,8 @@ func (w *Writer) Release() {
 		hostRelease(id)
 	}
 	w.temps = nil
+	keepAlive(w.lent)
+	w.lent = nil
 }
 
 func (w *Writer) U8(v uint8)    { w.buf = append(w.buf, v) }
