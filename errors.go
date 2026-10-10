@@ -49,3 +49,14 @@ func Malformed(format string, args ...any) error { return malformed(format, args
 
 // keepAlive keeps v reachable until this point.
 func keepAlive(v any) { runtime.KeepAlive(v) }
+
+// MissingFacilityError reports a call before the host installed a facility the program
+// needs: Operation is one of its operations.
+type MissingFacilityError struct {
+	Facility  string
+	Operation string
+}
+
+func (e *MissingFacilityError) Error() string {
+	return fmt.Sprintf("lungo: the host does not provide the facility %s (its operation %s): install it before calling the program", e.Facility, e.Operation)
+}
