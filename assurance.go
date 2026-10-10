@@ -57,9 +57,11 @@ type AssuranceSource struct {
 
 // AssuranceSpecification is a specification the program's claims cite.
 type AssuranceSpecification struct {
-	Name        string           `json:"name"`
-	Kind        string           `json:"kind"`
-	Statement   string           `json:"statement"`
+	Name      string `json:"name"`
+	Kind      string `json:"kind"`
+	Statement string `json:"statement"`
+	// Definition is the body, as Lean prints it, when the declaration is a definition.
+	Definition  *string          `json:"definition"`
 	Package     *string          `json:"package"`
 	Fingerprint string           `json:"fingerprint"`
 	Source      *AssuranceSource `json:"source"`
@@ -88,9 +90,11 @@ type AssuranceFacility struct {
 // AssuranceAssumption is a proposition assumed, never proved, of the host's implementation of a
 // facility.
 type AssuranceAssumption struct {
-	Name        string           `json:"name"`
-	Facility    string           `json:"facility"`
-	Statement   string           `json:"statement"`
+	Name      string `json:"name"`
+	Facility  string `json:"facility"`
+	Statement string `json:"statement"`
+	// Definition is the body, as Lean prints it, when the declaration is a definition.
+	Definition  *string          `json:"definition"`
 	Package     *string          `json:"package"`
 	Fingerprint string           `json:"fingerprint"`
 	Source      *AssuranceSource `json:"source"`
