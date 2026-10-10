@@ -49,3 +49,14 @@ func Malformed(format string, args ...any) error { return malformed(format, args
 
 // keepAlive keeps v reachable until this point.
 func keepAlive(v any) { runtime.KeepAlive(v) }
+
+// MissingCapabilityError reports a call before the host installed a capability the program
+// needs: Operation is one of its operations.
+type MissingCapabilityError struct {
+	Capability string
+	Operation  string
+}
+
+func (e *MissingCapabilityError) Error() string {
+	return fmt.Sprintf("lungo: the host does not provide the capability %s (its operation %s): install it before calling the program", e.Capability, e.Operation)
+}
