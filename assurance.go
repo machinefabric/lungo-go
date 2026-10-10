@@ -19,7 +19,7 @@ type Assurance struct {
 	Provenance     AssuranceProvenance      `json:"provenance"`
 	Library        *AssuranceLibrary        `json:"library"`
 	Specifications []AssuranceSpecification `json:"specifications"`
-	Capabilities   []AssuranceCapability    `json:"capabilities"`
+	Facilities     []AssuranceFacility      `json:"facilities"`
 	Assumptions    []AssuranceAssumption    `json:"assumptions"`
 	Claims         []AssuranceClaim         `json:"claims"`
 	Roles          []AssuranceRole          `json:"roles"`
@@ -65,15 +65,15 @@ type AssuranceSpecification struct {
 	Source      *AssuranceSource `json:"source"`
 }
 
-// AssuranceOperation is an operation of a capability.
+// AssuranceOperation is an operation of a facility.
 type AssuranceOperation struct {
 	Name        string  `json:"name"`
 	Symbol      *string `json:"symbol"`
 	Fingerprint *string `json:"fingerprint"`
 }
 
-// AssuranceCapability is a capability the host provides.
-type AssuranceCapability struct {
+// AssuranceFacility is a facility the host provides.
+type AssuranceFacility struct {
 	Name        string               `json:"name"`
 	ID          string               `json:"id"`
 	Form        string               `json:"form"`
@@ -86,10 +86,10 @@ type AssuranceCapability struct {
 }
 
 // AssuranceAssumption is a proposition assumed, never proved, of the host's implementation of a
-// capability.
+// facility.
 type AssuranceAssumption struct {
 	Name        string           `json:"name"`
-	Capability  string           `json:"capability"`
+	Facility    string           `json:"facility"`
 	Statement   string           `json:"statement"`
 	Package     *string          `json:"package"`
 	Fingerprint string           `json:"fingerprint"`
@@ -136,15 +136,15 @@ type AssuranceTrust struct {
 
 // AssuranceExport is what one export is, does and depends on.
 type AssuranceExport struct {
-	Name         string           `json:"name"`
-	Module       string           `json:"module"`
-	Async        bool             `json:"async"`
-	Trust        AssuranceTrust   `json:"trust"`
-	Claims       []string         `json:"claims"`
-	Assumptions  []string         `json:"assumptions"`
-	Capabilities []string         `json:"capabilities"`
-	Roles        []string         `json:"roles"`
-	Source       *AssuranceSource `json:"source"`
+	Name        string           `json:"name"`
+	Module      string           `json:"module"`
+	Async       bool             `json:"async"`
+	Trust       AssuranceTrust   `json:"trust"`
+	Claims      []string         `json:"claims"`
+	Assumptions []string         `json:"assumptions"`
+	Facilities  []string         `json:"facilities"`
+	Roles       []string         `json:"roles"`
+	Source      *AssuranceSource `json:"source"`
 }
 
 // ParseAssurance reads an assurance document, refusing one of another schema version or with
