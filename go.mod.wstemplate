@@ -1,4 +1,4 @@
 module github.com/machinefabric/lungo-go
-// version: 1.10.38
+// version: {{ project.version }}
 
 go 1.22
