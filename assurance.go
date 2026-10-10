@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"sort"
 )
 
 // AssuranceSchemaVersion is the version of the assurance document this package reads.
@@ -172,7 +173,59 @@ func ParseAssurance(data []byte) (*Assurance, error) {
 	if err := d.Decode(&a); err != nil {
 		return nil, err
 	}
+	// Unknown fields are refused while decoding; a missing one (it would decode as a zero value)
+	// is found by encoding the document again, which writes every field.
+	var read, written any
+	if err := json.Unmarshal(data, &read); err != nil {
+		return nil, err
+	}
+	again, err := json.Marshal(&a)
+	if err != nil {
+		return nil, err
+	}
+	if err := json.Unmarshal(again, &written); err != nil {
+		return nil, err
+	}
+	if missing := missingField(read, written, "document"); missing != "" {
+		return nil, fmt.Errorf("lungo: the assurance document's %s", missing)
+	}
 	return &a, nil
+}
+
+// missingField names the first field written has that read lacks, at any depth ("" for none).
+func missingField(read, written any, at string) string {
+	switch w := written.(type) {
+	case map[string]any:
+		r, ok := read.(map[string]any)
+		if !ok {
+			return ""
+		}
+		keys := make([]string, 0, len(w))
+		for k := range w {
+			keys = append(keys, k)
+		}
+		sort.Strings(keys)
+		for _, k := range keys {
+			rv, ok := r[k]
+			if !ok {
+				return at + " lacks the field " + k
+			}
+			if m := missingField(rv, w[k], at+"."+k); m != "" {
+				return m
+			}
+		}
+	case []any:
+		r, ok := read.([]any)
+		if !ok {
+			return ""
+		}
+		for i := 0; i < len(w) && i < len(r); i++ {
+			if m := missingField(r[i], w[i], fmt.Sprintf("%s[%d]", at, i)); m != "" {
+				return m
+			}
+		}
+	}
+	return ""
 }
 
 // Claim is the claim whose evidence is name.
