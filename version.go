@@ -3,8 +3,8 @@
 package lungo
 
 // Version is the lungo release of this module.
-const Version = "1.116.0"
+const Version = "1.117.0"
 
-// EnforceVersion1_116_0 is referenced by the packages lungo 1.116.0 generates, which
+// EnforceVersion1_117_0 is referenced by the packages lungo 1.117.0 generates, which
 // build only with this module's version.
-const EnforceVersion1_116_0 = 0
+const EnforceVersion1_117_0 = 0
